@@ -1,0 +1,89 @@
+version: '3'
+services:
+  proxy:
+    image: nginx:1.17-alpine 
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - main 
+      - ranking 
+    ports:
+      - 8888:80
+  db:
+    image: postgres:9.6-alpine
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/init.d:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: root 
+  main:
+    build: 
+      context: .
+      dockerfile: build/Dockerfile
+    image: "grus/cms:1"
+    expose:
+      - 8888
+      - 8889 
+    volumes:
+      - ./config/cms.conf:/usr/local/etc/cms.conf
+    environment:
+      CMS_INSTANCE_TYPE: MAIN
+      CMS_CONTEST_ID: 1 
+    depends_on:
+      - db
+  ranking:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: "grus/cms:1"
+    expose:
+      - 8890 
+    volumes:
+      - ./config/cms.ranking.conf:/usr/local/etc/cms.ranking.conf
+    environment:
+      CMS_INSTANCE_TYPE: RANKING 
+    depends_on:
+      - db
+  worker_1:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: "grus/cms:1"
+    expose:
+      - 26000
+    volumes:
+      - ./config/cms.conf:/usr/local/etc/cms.conf
+    environment:
+      CMS_INSTANCE_TYPE: WORKER 
+    depends_on:
+      - db
+  worker_2:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: "grus/cms:1"
+    expose:
+      - 26000
+    volumes:
+      - ./config/cms.conf:/usr/local/etc/cms.conf
+    environment:
+      CMS_INSTANCE_TYPE: WORKER
+    depends_on:
+      - db
+  worker_3:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: "grus/cms:1"
+    expose:
+      - 26000
+    volumes:
+      - ./config/cms.conf:/usr/local/etc/cms.conf
+    environment:
+      CMS_INSTANCE_TYPE: WORKER
+    depends_on:
+      - db
+
