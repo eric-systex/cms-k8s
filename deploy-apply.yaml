@@ -18,22 +18,22 @@ data:
     "_section": "AsyncLibrary",
     "core_services":
     {
-        "LogService":        [["main", 29000]],
-        "ResourceService":   [["main", 28000]],
-        "ScoringService":    [["main", 28500]],
-        "Checker":           [["main", 22000]],
-        "EvaluationService": [["main", 25000]],
+        "LogService":        [["localhost", 29000]],
+        "ResourceService":   [["localhost", 28000]],
+        "ScoringService":    [["localhost", 28500]],
+        "Checker":           [["localhost", 22000]],
+        "EvaluationService": [["localhost", 25000]],
         "Worker":            [["worker-1", 26000],
                               ["worker-2", 26000],
                               ["worker-3", 26000]],
-        "ContestWebServer":  [["main", 21000]],
-        "AdminWebServer":    [["main", 21100]],
-        "ProxyService":      [["main", 28600]],
-        "PrintingService":   [["main", 25123]]
+        "ContestWebServer":  [["localhost", 21000]],
+        "AdminWebServer":    [["localhost", 21100]],
+        "ProxyService":      [["localhost", 28600]],
+        "PrintingService":   [["localhost", 25123]]
         },
     "other_services":
     {
-        "TestFileCacher":    [["main", 27501]]
+        "TestFileCacher":    [["localhost", 27501]]
         },
     "_section": "Database",
     "_help": "Connection string for the database.",
@@ -137,12 +137,6 @@ data:
     }
 ---
 apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: main
-  namespace: cms
----
-apiVersion: v1
 kind: Service
 metadata:
   name: main
@@ -150,8 +144,6 @@ metadata:
   labels:
     app: main
 spec:
-  # define worker service as headless
-  clusterIP: None 
   ports:
   - protocol: TCP
     port: 8888
@@ -179,11 +171,10 @@ spec:
       labels:
         app: main
     spec:
-      serviceAccountName: main
       containers:
       - name: main
         image: registry.example.com/cms/cms:1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8888
         - containerPort: 8889
@@ -201,12 +192,6 @@ spec:
             name: cms
 ---
 apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: ranking
-  namespace: cms
----
-apiVersion: v1
 kind: Service
 metadata:
   name: ranking
@@ -214,8 +199,6 @@ metadata:
   labels:
     app: ranking
 spec:
-  # define worker service as headless
-  clusterIP: None 
   ports:
   - protocol: TCP
     port: 8890
@@ -240,11 +223,10 @@ spec:
       labels:
         app: ranking
     spec:
-      serviceAccountName: ranking
       containers:
       - name: ranking
         image: registry.example.com/cms/cms:1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8890
         env:
@@ -257,12 +239,6 @@ spec:
         - name: cms-config
           configMap:
             name: cms
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: worker
-  namespace: cms
 ---
 apiVersion: v1
 kind: Service
@@ -298,11 +274,10 @@ spec:
       labels:
         app: worker-1
     spec:
-      serviceAccountName: worker
       containers:
       - name: worker-1
         image: registry.example.com/cms/cms:1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 26000
         env:
@@ -350,11 +325,10 @@ spec:
       labels:
         app: worker-2
     spec:
-      serviceAccountName: worker
       containers:
       - name: worker-2
         image: registry.example.com/cms/cms:1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 26000
         env:
@@ -402,11 +376,10 @@ spec:
       labels:
         app: worker-3
     spec:
-      serviceAccountName: worker
       containers:
       - name: worker-3
         image: registry.example.com/cms/cms:1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 26000
         env:
