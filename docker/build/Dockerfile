@@ -67,10 +67,7 @@ RUN python prerequisites.py -y --as-root install && \
     python -m pip install --no-cache-dir -r requirements.txt && \
     python setup.py install
 
-#Import Contest Sample
-COPY contest-sample /tmp/contest-sample
-
 #Copy and set execution bit of the start up script.
-COPY startup.sh /startup.sh
+COPY build/startup.sh /startup.sh
 RUN chmod +x /startup.sh
 ENTRYPOINT ["/startup.sh"]

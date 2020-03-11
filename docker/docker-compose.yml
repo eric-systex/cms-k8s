@@ -1,14 +1,5 @@
 version: '3'
 services:
-  proxy:
-    image: nginx:1.17-alpine 
-    volumes:
-      - ./config/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - main 
-      - ranking 
-    ports:
-      - 8888:80
   db:
     image: postgres:9.6-alpine
     volumes:
@@ -17,8 +8,8 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: postgres 
-      POSTGRES_PASSWORD: root 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
   main:
     build: 
       context: .
@@ -34,6 +25,10 @@ services:
       CMS_CONTEST_ID: 1 
     depends_on:
       - db
+      - ranking 
+      - worker_1 
+      - worker_2
+      - worker_3
   ranking:
     build:
       context: .
@@ -86,4 +81,13 @@ services:
       CMS_INSTANCE_TYPE: WORKER
     depends_on:
       - db
+  proxy:
+    image: nginx:1.17-alpine
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - main
+      - ranking
+    ports:
+      - 80:80
 
