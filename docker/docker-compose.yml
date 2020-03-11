@@ -14,46 +14,49 @@ services:
     build:
       context: .
       dockerfile: build/Dockerfile
-    image: "grus/cms:1"
+    image: "grus/cms:2"
     expose:
       - 26000
     volumes:
       - ./config/cms.conf:/usr/local/etc/cms.conf
     environment:
       CMS_INSTANCE_TYPE: WORKER
+      CMS_SHARD_ID: 0 
     depends_on:
       - db
   worker-2:
     build:
       context: .
       dockerfile: build/Dockerfile
-    image: "grus/cms:1"
+    image: "grus/cms:2"
     expose:
       - 26000
     volumes:
       - ./config/cms.conf:/usr/local/etc/cms.conf
     environment:
       CMS_INSTANCE_TYPE: WORKER
+      CMS_SHARD_ID: 1 
     depends_on:
       - db
   worker-3:
     build:
       context: .
       dockerfile: build/Dockerfile
-    image: "grus/cms:1"
+    image: "grus/cms:2"
     expose:
       - 26000
     volumes:
       - ./config/cms.conf:/usr/local/etc/cms.conf
     environment:
       CMS_INSTANCE_TYPE: WORKER
+      CMS_SHARD_ID: 2 
     depends_on:
       - db
   ranking:
     build:
       context: .
       dockerfile: build/Dockerfile
-    image: "grus/cms:1"
+    image: "grus/cms:2"
     expose:
       - 8890
     volumes:
@@ -66,7 +69,7 @@ services:
     build: 
       context: .
       dockerfile: build/Dockerfile
-    image: "grus/cms:1"
+    image: "grus/cms:2"
     expose:
       - 8888
       - 8889 
