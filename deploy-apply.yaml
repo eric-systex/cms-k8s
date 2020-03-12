@@ -486,3 +486,28 @@ spec:
           configMap:
             name: db-init
 ---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cms
+  namespace: cms
+spec:
+  rules:
+  - host: cms.lab.istio.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: main
+          servicePort: 8888
+  - host: cms-admin.lab.istio.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: main
+          servicePort: 8889
+  - host: cms-ranking.lab.istio.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: ranking
+          servicePort: 8890
