@@ -185,7 +185,8 @@ spec:
             value: "1"
         volumeMounts:
           - name: cms-config
-            mountPath: /usr/local/etc
+            mountPath: /usr/local/etc/cms.conf
+            subPath: cms.conf
       volumes:
         - name: cms-config
           configMap:
@@ -234,7 +235,8 @@ spec:
             value: "RANKING"
         volumeMounts:
           - name: cms-config
-            mountPath: /usr/local/etc
+            mountPath: /usr/local/etc/cms.ranking.conf
+            subPath: cms.ranking.conf
       volumes:
         - name: cms-config
           configMap:
@@ -249,7 +251,7 @@ metadata:
     app: worker-1
 spec:
   # define worker service as headless
-  clusterIP: None 
+  clusterIP: None
   ports:
   - protocol: TCP
     port: 26000
@@ -257,7 +259,7 @@ spec:
   selector:
     app: worker-1
 ---
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: worker-1
@@ -278,6 +280,8 @@ spec:
       - name: worker-1
         image: registry.example.com/cms/cms:2
         imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
         ports:
         - containerPort: 26000
         env:
@@ -287,7 +291,8 @@ spec:
             value: "0"
         volumeMounts:
           - name: cms-config
-            mountPath: /usr/local/etc
+            mountPath: /usr/local/etc/cms.conf
+            subPath: cms.conf
       volumes:
         - name: cms-config
           configMap:
@@ -331,6 +336,8 @@ spec:
       - name: worker-2
         image: registry.example.com/cms/cms:2
         imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
         ports:
         - containerPort: 26000
         env:
@@ -340,7 +347,8 @@ spec:
             value: "1"
         volumeMounts:
           - name: cms-config
-            mountPath: /usr/local/etc
+            mountPath: /usr/local/etc/cms.conf
+            subPath: cms.conf
       volumes:
         - name: cms-config
           configMap:
@@ -384,6 +392,8 @@ spec:
       - name: worker-3
         image: registry.example.com/cms/cms:2
         imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
         ports:
         - containerPort: 26000
         env:
@@ -393,7 +403,8 @@ spec:
             value: "2"
         volumeMounts:
           - name: cms-config
-            mountPath: /usr/local/etc
+            mountPath: /usr/local/etc/cms.conf
+            subPath: cms.conf
       volumes:
         - name: cms-config
           configMap:
