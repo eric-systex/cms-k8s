@@ -173,7 +173,7 @@ spec:
     spec:
       containers:
       - name: main
-        image: registry.example.com/cms/cms:2
+        image: eric7940/cms:2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8888
@@ -226,7 +226,7 @@ spec:
     spec:
       containers:
       - name: ranking
-        image: registry.example.com/cms/cms:2
+        image: eric7940/cms:2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8890
@@ -278,7 +278,7 @@ spec:
     spec:
       containers:
       - name: worker-1
-        image: registry.example.com/cms/cms:2
+        image: eric7940/cms:2
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -334,7 +334,7 @@ spec:
     spec:
       containers:
       - name: worker-2
-        image: registry.example.com/cms/cms:2
+        image: eric7940/cms:2
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -390,7 +390,7 @@ spec:
     spec:
       containers:
       - name: worker-3
-        image: registry.example.com/cms/cms:2
+        image: eric7940/cms:2
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
